@@ -5,3 +5,6 @@ Criou o jogador e os itens
 Vídeo 2
 
 Criou o sistema de tiro, onde a bala é um objeto pre fabricado que é instanciado e destruido após um tempo
+
+Vídeo 3
+Criou o inimigo, e adicionou a bala o sistema para que mate o inimigo
