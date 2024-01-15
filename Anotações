@@ -1,3 +1,7 @@
 Vídeo 1
 
 Criou o jogador e os itens
+
+Vídeo 2
+
+Criou o sistema de tiro, onde a bala é um objeto pre fabricado que é instanciado e destruido após um tempo
