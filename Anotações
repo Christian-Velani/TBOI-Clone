@@ -13,3 +13,7 @@ Criou o inimigo, e adicionou a bala o sistema para que mate o inimigo
 Vídeo 4
 
 Criou o controlador dos status do jogo(Vida, Vida Máxima, etc..) e atualizou o inimigo para atacar o jogador
+
+Vídeo 5
+
+Organizou em pastas os arquivos, criou a UI da vida.
