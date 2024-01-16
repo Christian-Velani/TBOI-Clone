@@ -15,11 +15,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-
     }
 
     void Update()
     {
+        fireDelay = GameController.FireRate;
+        speed = GameController.MoveSpeed;
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 

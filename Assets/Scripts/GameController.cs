@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
-    public static int Health { get; set; } = 6;
+    public static float Health { get; set; } = 6;
     public static int MaxHealth { get; set; } = 6;
     public static float MoveSpeed { get; set; } = 5f;
     public static float FireRate { get; set; } = 0.5f;
+    public static float BulletSize { get; set; } = 0.5f;
     public Text healthText;
     private void Awake()
     {
@@ -36,9 +37,24 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public static void HealPlayer(int healAmount)
+    public static void HealPlayer(float healAmount)
     {
         Health = Mathf.Min(MaxHealth, Health + healAmount);
+    }
+
+    public static void MoveSpeedChange(float speed)
+    {
+        MoveSpeed += speed;
+    }
+
+    public static void FireRateChange(float rate)
+    {
+        FireRate -= rate;
+    }
+
+    public static void BulletSizeChange(float size)
+    {
+        BulletSize += size;
     }
 
     private static void KillPlayer()

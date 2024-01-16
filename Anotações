@@ -1,19 +1,23 @@
 Vídeo 1
 
-Criou o jogador e os itens
+Criou o jogador e os itens.
 
 Vídeo 2
 
-Criou o sistema de tiro, onde a bala é um objeto pre fabricado que é instanciado e destruido após um tempo
+Criou o sistema de tiro, onde a bala é um objeto pre fabricado que é instanciado e destruido após um tempo.
 
 Vídeo 3
 
-Criou o inimigo, e adicionou a bala o sistema para que mate o inimigo
+Criou o inimigo, e adicionou a bala o sistema para que mate o inimigo.
 
 Vídeo 4
 
-Criou o controlador dos status do jogo(Vida, Vida Máxima, etc..) e atualizou o inimigo para atacar o jogador
+Criou o controlador dos status do jogo(Vida, Vida Máxima, etc..) e atualizou o inimigo para atacar o jogador.
 
 Vídeo 5
 
 Organizou em pastas os arquivos, criou a UI da vida.
+
+Vídeo 6
+
+Terminando os itens.
