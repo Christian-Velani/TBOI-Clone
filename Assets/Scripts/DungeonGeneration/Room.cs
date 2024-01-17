@@ -16,6 +16,8 @@ public class Room : MonoBehaviour
             Debug.Log("You Pressed play in the wrong Scene!");
             return;
         }
+
+        RoomController.instance.RegisterRoom(this);
     }
 
     void OnDrawGizmos()

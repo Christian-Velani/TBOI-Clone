@@ -25,6 +25,75 @@ public class RoomController : MonoBehaviour
         instance = this;
     }
 
+    void Start()
+    {
+        LoadRoom("Start", 0, 0);
+        LoadRoom("Empty", 1, 0);
+        LoadRoom("Empty", 0, 1);
+        LoadRoom("Empty", -1, 0);
+        LoadRoom("Empty", 0, -1);
+    }
+
+    void Update()
+    {
+        if (isLoadingRoom)
+        {
+            return;
+        }
+
+        if (loadRoomQueue.Count == 0)
+        {
+            return;
+        }
+
+        currentLoadRoomData = loadRoomQueue.Dequeue();
+        isLoadingRoom = true;
+
+        StartCoroutine(LoadRoomRoutine(currentLoadRoomData));
+    }
+
+    public void LoadRoom(string name, int x, int y)
+    {
+        if (DoesRoomExists(x, y))
+        {
+            return;
+        }
+        RoomInfo newRoomData = new()
+        {
+            name = name,
+            x = x,
+            y = y
+        };
+
+        loadRoomQueue.Enqueue(newRoomData);
+    }
+
+    IEnumerator LoadRoomRoutine(RoomInfo info)
+    {
+        string roomName = currentWorldName + info.name;
+
+        AsyncOperation loadRoom = SceneManager.LoadSceneAsync(roomName, LoadSceneMode.Additive);
+
+        while (loadRoom.isDone == false)
+        {
+            yield return null;
+        }
+    }
+
+    public void RegisterRoom(Room room)
+    {
+        room.transform.position = new Vector3(currentLoadRoomData.x * room.width, currentLoadRoomData.y * room.height, 0);
+
+        room.x = currentLoadRoomData.x;
+        room.y = currentLoadRoomData.y;
+        room.name = currentWorldName + "-" + currentLoadRoomData.name;
+        room.transform.parent = transform;
+
+        isLoadingRoom = false;
+
+        loadedRooms.Add(room);
+    }
+
     public bool DoesRoomExists(int x, int y)
     {
         return loadedRooms.Find(item => item.x == x && item.y == y) != null;
