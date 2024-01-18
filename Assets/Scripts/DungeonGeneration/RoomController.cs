@@ -16,6 +16,7 @@ public class RoomController : MonoBehaviour
     public static RoomController instance;
     string currentWorldName = "Basement";
     RoomInfo currentLoadRoomData;
+    Room currRoom;
     Queue<RoomInfo> loadRoomQueue = new();
     public List<Room> loadedRooms = new();
     bool isLoadingRoom = false;
@@ -91,12 +92,23 @@ public class RoomController : MonoBehaviour
 
         isLoadingRoom = false;
 
+        if (loadedRooms.Count == 0)
+        {
+            CameraController.instance.currRoom = room;
+        }
+
         loadedRooms.Add(room);
     }
 
     public bool DoesRoomExists(int x, int y)
     {
         return loadedRooms.Find(item => item.x == x && item.y == y) != null;
+    }
+
+    public void OnPlayerEnterRoom(Room room)
+    {
+        CameraController.instance.currRoom = room;
+        currRoom = room;
     }
 
 }

@@ -30,4 +30,12 @@ public class Room : MonoBehaviour
     {
         return new Vector3(x * width, y * height);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            RoomController.instance.OnPlayerEnterRoom(this);
+        }
+    }
 }
