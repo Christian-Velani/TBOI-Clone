@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currRoom: {fileID: 0}
-  moveSpeedWhenRoomChange: 300
+  moveSpeedWhenRoomChange: 100
 --- !u!1 &670298470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1668,6 +1668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2098945261}
   - component: {fileID: 2098945260}
+  - component: {fileID: 2098945262}
   m_Layer: 0
   m_Name: RoomController
   m_TagString: Untagged
@@ -1703,6 +1704,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2098945262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098945259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152c1dd48d83fd44896bd53c278a1a9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonGenerationData: {fileID: 11400000, guid: bcbca612650d0f94bb9222b7fe7922cd, type: 2}
 --- !u!1 &2110830388
 GameObject:
   m_ObjectHideFlags: 0
