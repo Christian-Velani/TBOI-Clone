@@ -83,26 +83,40 @@ public class RoomController : MonoBehaviour
 
     public void RegisterRoom(Room room)
     {
-        room.transform.position = new Vector3(currentLoadRoomData.x * room.width, currentLoadRoomData.y * room.height, 0);
-
-        room.x = currentLoadRoomData.x;
-        room.y = currentLoadRoomData.y;
-        room.name = currentWorldName + "-" + currentLoadRoomData.name;
-        room.transform.parent = transform;
-
-        isLoadingRoom = false;
-
-        if (loadedRooms.Count == 0)
+        if (!DoesRoomExists(currentLoadRoomData.x, currentLoadRoomData.y))
         {
-            CameraController.instance.currRoom = room;
-        }
+            room.transform.position = new Vector3(currentLoadRoomData.x * room.width, currentLoadRoomData.y * room.height, 0);
 
-        loadedRooms.Add(room);
+            room.x = currentLoadRoomData.x;
+            room.y = currentLoadRoomData.y;
+            room.name = currentWorldName + "-" + currentLoadRoomData.name + "-" + currentLoadRoomData.x + currentLoadRoomData.y;
+            room.transform.parent = transform;
+
+            isLoadingRoom = false;
+
+            if (loadedRooms.Count == 0)
+            {
+                CameraController.instance.currRoom = room;
+            }
+
+            loadedRooms.Add(room);
+            room.RemoveUnconnectedDoors();
+        }
+        else
+        {
+            Destroy(room.gameObject);
+            isLoadingRoom = false;
+        }
     }
 
     public bool DoesRoomExists(int x, int y)
     {
         return loadedRooms.Find(item => item.x == x && item.y == y) != null;
+    }
+
+    public Room FindRoom(int x, int y)
+    {
+        return loadedRooms.Find(item => item.x == x && item.y == y);
     }
 
     public void OnPlayerEnterRoom(Room room)
