@@ -45,3 +45,7 @@ Sistema de Geração procedural das salas implementado.
 Vídeo 12
 
 Corrigindo a geração das portas para que não sejam geradas em lugares em que não tem sala através delas e geração de sala de boss feita.
+
+Vídeo 13
+
+Mudando como a sala de boss é gerada e como as portas desnecessárias são removidas.
