@@ -25,8 +25,8 @@ public class GridController : MonoBehaviour
 
     public void GenerateGrid()
     {
-        // grid.verticalOffset = room.transform.position.x;
-        // grid.horizontalOffset = room.transform.position.y;
+        grid.verticalOffset += room.transform.position.x;
+        grid.horizontalOffset += room.transform.position.y;
 
         for (int y = 0; y < grid.rows; y++)
         {
@@ -36,7 +36,10 @@ public class GridController : MonoBehaviour
                 go.transform.position = new Vector2(x - (grid.rows - grid.horizontalOffset), y - (grid.columns - grid.verticalOffset));
                 go.name = "X: " + x + ",Y: " + y;
                 availablePoints.Add(go.transform.position);
+                go.SetActive(false);
             }
         }
+
+        GetComponentInParent<ObjectRoomSpawner>().InitializeObjectSpawning();
     }
 }
