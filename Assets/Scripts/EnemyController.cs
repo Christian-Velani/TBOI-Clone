@@ -6,6 +6,7 @@ using UnityEngine;
 
 public enum EnemyState
 {
+    Idle,
     Wander,
     Follow,
     Die,
@@ -21,13 +22,14 @@ public enum EnemyType
 public class EnemyController : MonoBehaviour
 {
     GameObject player;
-    public EnemyState currState = EnemyState.Wander;
+    public EnemyState currState = EnemyState.Idle;
     public EnemyType enemyType;
     public float range;
     public float speed;
     public float attackRange;
     public float bulletSpeed;
     public float coolDown;
+    public bool notInRoom = false;
     private bool chooseDir = false;
     private bool dead = false;
     private bool coolDownAttack = false;
@@ -45,6 +47,9 @@ public class EnemyController : MonoBehaviour
     {
         switch (currState)
         {
+            case EnemyState.Idle:
+                Idle();
+                break;
             case EnemyState.Wander:
                 Wander();
                 break;
@@ -61,18 +66,25 @@ public class EnemyController : MonoBehaviour
                 break;
         }
 
-        if (IsPlayerInRange(range) && currState != EnemyState.Die)
+        if (!notInRoom)
         {
-            currState = EnemyState.Follow;
-        }
-        else if (!IsPlayerInRange(range) && currState != EnemyState.Die)
-        {
-            currState = EnemyState.Wander;
-        }
+            if (IsPlayerInRange(range) && currState != EnemyState.Die)
+            {
+                currState = EnemyState.Follow;
+            }
+            else if (!IsPlayerInRange(range) && currState != EnemyState.Die)
+            {
+                currState = EnemyState.Wander;
+            }
 
-        if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+            if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+            {
+                currState = EnemyState.Attack;
+            }
+        }
+        else
         {
-            currState = EnemyState.Attack;
+            currState = EnemyState.Idle;
         }
     }
 
@@ -142,6 +154,11 @@ public class EnemyController : MonoBehaviour
     public void Death()
     {
         Destroy(gameObject);
+    }
+
+    public void Idle()
+    {
+
     }
 
 }

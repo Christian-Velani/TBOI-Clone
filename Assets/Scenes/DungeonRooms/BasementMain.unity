@@ -481,6 +481,7 @@ MonoBehaviour:
   attackRange: 5
   bulletSpeed: 5
   coolDown: 2
+  notInRoom: 0
   bulletPreFab: {fileID: 5555934037640113646, guid: c27466589c81c0e43bbb299c0504842a, type: 3}
 --- !u!212 &181719651
 SpriteRenderer:
