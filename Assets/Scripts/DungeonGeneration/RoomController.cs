@@ -17,7 +17,7 @@ public class RoomController : MonoBehaviour
     string currentWorldName = "Basement";
     RoomInfo currentLoadRoomData;
     Room currRoom;
-    Queue<RoomInfo> loadRoomQueue = new();
+    public Queue<RoomInfo> loadRoomQueue = new();
     public List<Room> loadedRooms = new();
     bool isLoadingRoom = false;
     bool spawnedBossRoom = false;
@@ -85,7 +85,7 @@ public class RoomController : MonoBehaviour
 
     public void LoadRoom(string name, int x, int y)
     {
-        if (DoesRoomExists(x, y))
+        if (DoesRoomExistsInQueue(x, y))
         {
             return;
         }
@@ -113,7 +113,7 @@ public class RoomController : MonoBehaviour
 
     public void RegisterRoom(Room room)
     {
-        if (!DoesRoomExists(currentLoadRoomData.x, currentLoadRoomData.y))
+        if (!DoesRoomExistsInList(currentLoadRoomData.x, currentLoadRoomData.y))
         {
             room.transform.position = new Vector3(currentLoadRoomData.x * room.width, currentLoadRoomData.y * room.height, 0);
 
@@ -138,7 +138,20 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public bool DoesRoomExists(int x, int y)
+    public bool DoesRoomExistsInQueue(int x, int y)
+    {
+        foreach (RoomInfo room in loadRoomQueue)
+        {
+            if (room.x == x && room.y == y)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public bool DoesRoomExistsInList(int x, int y)
     {
         return loadedRooms.Find(item => item.x == x && item.y == y) != null;
     }

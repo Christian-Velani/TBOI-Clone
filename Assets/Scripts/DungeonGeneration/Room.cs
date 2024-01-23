@@ -100,7 +100,7 @@ public class Room : MonoBehaviour
 
     public Room GetRight()
     {
-        if (RoomController.instance.DoesRoomExists(x + 1, y))
+        if (RoomController.instance.DoesRoomExistsInList(x + 1, y))
         {
             return RoomController.instance.FindRoom(x + 1, y);
         }
@@ -109,7 +109,7 @@ public class Room : MonoBehaviour
     }
     public Room GetLeft()
     {
-        if (RoomController.instance.DoesRoomExists(x - 1, y))
+        if (RoomController.instance.DoesRoomExistsInList(x - 1, y))
         {
             return RoomController.instance.FindRoom(x - 1, y);
         }
@@ -117,7 +117,7 @@ public class Room : MonoBehaviour
     }
     public Room GetTop()
     {
-        if (RoomController.instance.DoesRoomExists(x, y + 1))
+        if (RoomController.instance.DoesRoomExistsInList(x, y + 1))
         {
             return RoomController.instance.FindRoom(x, y + 1);
         }
@@ -125,7 +125,7 @@ public class Room : MonoBehaviour
     }
     public Room GetDown()
     {
-        if (RoomController.instance.DoesRoomExists(x, y - 1))
+        if (RoomController.instance.DoesRoomExistsInList(x, y - 1))
         {
             return RoomController.instance.FindRoom(x, y - 1);
         }
