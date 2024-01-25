@@ -15,13 +15,14 @@ public class RoomController : MonoBehaviour
 {
     public static RoomController instance;
     string currentWorldName = "Basement";
-    RoomInfo currentLoadRoomData;
     Room currRoom;
-    public Queue<RoomInfo> loadRoomQueue = new();
+    RoomInfo roomToRemove;
+    public List<RoomInfo> loadRoomQueue = new();
     public List<Room> loadedRooms = new();
     bool isLoadingRoom = false;
     bool spawnedBossRoom = false;
     bool updatedRooms = false;
+    bool primeiraSalaCriada = false;
 
     void Awake()
     {
@@ -37,8 +38,22 @@ public class RoomController : MonoBehaviour
         // LoadRoom("Empty", 0, -1);
     }
 
+    void CriarPrimeiraSala()
+    {
+        roomToRemove = loadRoomQueue.Single(r => r.x == 0 && r.y == 0 && r.name == "Start");
+        loadRoomQueue.Remove(roomToRemove);
+        isLoadingRoom = true;
+
+        StartCoroutine(LoadRoomRoutine(roomToRemove));
+        primeiraSalaCriada = true;
+    }
+
     void Update()
     {
+        if (!primeiraSalaCriada)
+        {
+            CriarPrimeiraSala();
+        }
         if (isLoadingRoom)
         {
             return;
@@ -50,22 +65,23 @@ public class RoomController : MonoBehaviour
             {
                 StartCoroutine(SpawnBossRoom());
             }
-            else if (spawnedBossRoom && !updatedRooms)
-            {
-                foreach (Room room in loadedRooms)
-                {
-                    room.RemoveUnconnectedDoors();
-                }
-                UpdateRooms();
-                updatedRooms = true;
-            }
-            return;
         }
+        // else if (spawnedBossRoom && !updatedRooms)
+        // {
+        //     foreach (Room room in loadedRooms)
+        //     {
+        //         room.RemoveUnconnectedDoors();
+        //     }
+        UpdateRooms();
+        updatedRooms = true;
+        // }
+        // return;
+        // }
 
-        currentLoadRoomData = loadRoomQueue.Dequeue();
-        isLoadingRoom = true;
+        //roomToRemove = loadRoomQueue.Dequeue();
+        //isLoadingRoom = true;
 
-        StartCoroutine(LoadRoomRoutine(currentLoadRoomData));
+        //StartCoroutine(LoadRoomRoutine(roomToRemove));
     }
 
     IEnumerator SpawnBossRoom()
@@ -77,8 +93,8 @@ public class RoomController : MonoBehaviour
             Room bossRoom = loadedRooms[loadedRooms.Count - 1];
             Room tempRoom = new(bossRoom.x, bossRoom.y);
             Destroy(bossRoom.gameObject);
-            var roomToRemove = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
-            loadedRooms.Remove(roomToRemove);
+            var roomToRemove2 = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
+            loadedRooms.Remove(roomToRemove2);
             LoadRoom("End", tempRoom.x, tempRoom.y);
         }
     }
@@ -96,7 +112,8 @@ public class RoomController : MonoBehaviour
             y = y
         };
 
-        loadRoomQueue.Enqueue(newRoomData);
+        loadRoomQueue.Add(newRoomData);
+        Debug.Log($"Tamanho da fila: {loadRoomQueue.Count}");
     }
 
     IEnumerator LoadRoomRoutine(RoomInfo info)
@@ -113,13 +130,13 @@ public class RoomController : MonoBehaviour
 
     public void RegisterRoom(Room room)
     {
-        if (!DoesRoomExistsInList(currentLoadRoomData.x, currentLoadRoomData.y))
+        if (!DoesRoomExistsInList(roomToRemove.x, roomToRemove.y))
         {
-            room.transform.position = new Vector3(currentLoadRoomData.x * room.width, currentLoadRoomData.y * room.height, 0);
+            room.transform.position = new Vector3(roomToRemove.x * room.width, roomToRemove.y * room.height, 0);
 
-            room.x = currentLoadRoomData.x;
-            room.y = currentLoadRoomData.y;
-            room.name = currentWorldName + "-" + currentLoadRoomData.name + "-" + currentLoadRoomData.x + currentLoadRoomData.y;
+            room.x = roomToRemove.x;
+            room.y = roomToRemove.y;
+            room.name = currentWorldName + "-" + roomToRemove.name + "-" + roomToRemove.x + roomToRemove.y;
             room.transform.parent = transform;
 
             isLoadingRoom = false;
@@ -128,8 +145,8 @@ public class RoomController : MonoBehaviour
             {
                 CameraController.instance.currRoom = room;
             }
-
             loadedRooms.Add(room);
+            Debug.Log($"Tamanho da Lista: {loadedRooms.Count}");
         }
         else
         {
@@ -140,14 +157,7 @@ public class RoomController : MonoBehaviour
 
     public bool DoesRoomExistsInQueue(int x, int y)
     {
-        foreach (RoomInfo room in loadRoomQueue)
-        {
-            if (room.x == x && room.y == y)
-            {
-                return true;
-            }
-        }
-        return false;
+        return loadRoomQueue.Find(item => item.x == x && item.y == y) != null;
 
     }
 
@@ -175,8 +185,73 @@ public class RoomController : MonoBehaviour
     {
         CameraController.instance.currRoom = room;
         currRoom = room;
-
         UpdateRooms();
+    }
+
+    public void PassouPorta(Door door)
+    {
+        switch (door.doorType)
+        {
+            case Door.DoorType.left:
+                PassouEsquerda();
+                break;
+            case Door.DoorType.right:
+                PassouDireita();
+                break;
+            case Door.DoorType.top:
+                PassouCima();
+                break;
+            case Door.DoorType.bottom:
+                PassouBaixo();
+                break;
+        }
+    }
+
+    public void PassouEsquerda()
+    {
+        if (DoesRoomExistsInQueue(currRoom.x - 1, currRoom.y))
+        {
+            roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x - 1 && r.y == currRoom.y);
+            loadRoomQueue.Remove(roomToRemove);
+            isLoadingRoom = true;
+
+            StartCoroutine(LoadRoomRoutine(roomToRemove));
+        }
+    }
+    public void PassouDireita()
+    {
+        if (DoesRoomExistsInQueue(currRoom.x + 1, currRoom.y))
+        {
+            roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x + 1 && r.y == currRoom.y);
+            loadRoomQueue.Remove(roomToRemove);
+            isLoadingRoom = true;
+
+            StartCoroutine(LoadRoomRoutine(roomToRemove));
+        }
+    }
+
+    public void PassouCima()
+    {
+        if (DoesRoomExistsInQueue(currRoom.x, currRoom.y + 1))
+        {
+            roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x && r.y == currRoom.y + 1);
+            loadRoomQueue.Remove(roomToRemove);
+            isLoadingRoom = true;
+
+            StartCoroutine(LoadRoomRoutine(roomToRemove));
+        }
+    }
+
+    public void PassouBaixo()
+    {
+        if (DoesRoomExistsInQueue(currRoom.x, currRoom.y - 1))
+        {
+            roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x && r.y == currRoom.y - 1);
+            loadRoomQueue.Remove(roomToRemove);
+            isLoadingRoom = true;
+
+            StartCoroutine(LoadRoomRoutine(roomToRemove));
+        }
     }
 
     private void UpdateRooms()

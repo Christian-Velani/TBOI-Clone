@@ -51,6 +51,7 @@ public class Room : MonoBehaviour
                     break;
             }
         }
+        RemoveUnconnectedDoors();
 
         RoomController.instance.RegisterRoom(this);
     }
@@ -68,28 +69,33 @@ public class Room : MonoBehaviour
     {
         foreach (Door door in doors)
         {
+            Debug.Log($"Verificando porta: {door.doorType}");
+            Debug.Log($"Existe sala a esquerda: {RoomController.instance.DoesRoomExistsInQueue(x - 1, y)}");
+            Debug.Log($"Existe sala a direita: {RoomController.instance.DoesRoomExistsInQueue(x + 1, y)}");
+            Debug.Log($"Existe sala a cima: {RoomController.instance.DoesRoomExistsInQueue(x, y + 1)}");
+            Debug.Log($"Existe sala a baixo: {RoomController.instance.DoesRoomExistsInQueue(x, y - 1)}");
             switch (door.doorType)
             {
                 case Door.DoorType.left:
-                    if (GetLeft() == null)
+                    if (!RoomController.instance.DoesRoomExistsInQueue(x - 1, y))
                     {
                         door.gameObject.SetActive(false);
                     }
                     break;
                 case Door.DoorType.right:
-                    if (GetRight() == null)
+                    if (!RoomController.instance.DoesRoomExistsInQueue(x + 1, y))
                     {
                         door.gameObject.SetActive(false);
                     }
                     break;
                 case Door.DoorType.top:
-                    if (GetTop() == null)
+                    if (!RoomController.instance.DoesRoomExistsInQueue(x, y + 1))
                     {
                         door.gameObject.SetActive(false);
                     }
                     break;
                 case Door.DoorType.bottom:
-                    if (GetDown() == null)
+                    if (!RoomController.instance.DoesRoomExistsInQueue(x, y - 1))
                     {
                         door.gameObject.SetActive(false);
                     }
@@ -98,39 +104,39 @@ public class Room : MonoBehaviour
         }
     }
 
-    public Room GetRight()
-    {
-        if (RoomController.instance.DoesRoomExistsInList(x + 1, y))
-        {
-            return RoomController.instance.FindRoom(x + 1, y);
-        }
-        return null;
+    // public Room GetRight()
+    // {
+    //     if (RoomController.instance.DoesRoomExistsInList(x + 1, y))
+    //     {
+    //         return RoomController.instance.FindRoom(x + 1, y);
+    //     }
+    //     return null;
 
-    }
-    public Room GetLeft()
-    {
-        if (RoomController.instance.DoesRoomExistsInList(x - 1, y))
-        {
-            return RoomController.instance.FindRoom(x - 1, y);
-        }
-        return null;
-    }
-    public Room GetTop()
-    {
-        if (RoomController.instance.DoesRoomExistsInList(x, y + 1))
-        {
-            return RoomController.instance.FindRoom(x, y + 1);
-        }
-        return null;
-    }
-    public Room GetDown()
-    {
-        if (RoomController.instance.DoesRoomExistsInList(x, y - 1))
-        {
-            return RoomController.instance.FindRoom(x, y - 1);
-        }
-        return null;
-    }
+    // }
+    // public Room GetLeft()
+    // {
+    //     if (RoomController.instance.DoesRoomExistsInList(x - 1, y))
+    //     {
+    //         return RoomController.instance.FindRoom(x - 1, y);
+    //     }
+    //     return null;
+    // }
+    // public Room GetTop()
+    // {
+    //     if (RoomController.instance.DoesRoomExistsInList(x, y + 1))
+    //     {
+    //         return RoomController.instance.FindRoom(x, y + 1);
+    //     }
+    //     return null;
+    // }
+    // public Room GetDown()
+    // {
+    //     if (RoomController.instance.DoesRoomExistsInList(x, y - 1))
+    //     {
+    //         return RoomController.instance.FindRoom(x, y - 1);
+    //     }
+    //     return null;
+    // }
 
     void OnDrawGizmos()
     {
