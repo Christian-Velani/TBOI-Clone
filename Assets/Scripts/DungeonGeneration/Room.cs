@@ -24,13 +24,13 @@ public class Room : MonoBehaviour
     {
         if (RoomController.instance == null)
         {
-            Debug.Log("You Pressed play in the wrong Scene!");
             return;
         }
 
         Door[] ds = GetComponentsInChildren<Door>();
         foreach (Door d in ds)
         {
+            d.gameObject.SetActive(false);
             switch (d.doorType)
             {
                 case Door.DoorType.left:
@@ -51,29 +51,50 @@ public class Room : MonoBehaviour
                     break;
             }
         }
-        RemoveUnconnectedDoors();
-
         RoomController.instance.RegisterRoom(this);
+        UpdateDoors();
+        InimigosExistem();
     }
 
-    void Update()
+    void InimigosExistem()
     {
-        if (name.Contains("End") && !updatedDoors)
+        if (GetComponentInChildren<EnemyController>())
         {
-            RemoveUnconnectedDoors();
-            updatedDoors = true;
+            DesativarPortas();
         }
     }
 
-    public void RemoveUnconnectedDoors()
+    // void Update()
+    // {
+    //     if (GetComponent<ObjectRoomSpawner>().spawnerData.Length != 0)
+    //     {
+    //         foreach (Door door in doors)
+    //         { door.gameObject.SetActive(false); };
+    //     }
+    //     else
+    //     {
+    //         ReativarPortas();
+    //     }
+    //     //     if (name.Contains("End") && !updatedDoors)
+    //     //     {
+    //     //         UpdateDoors();
+    //     //         updatedDoors = true;
+    //     //     }
+    // }
+
+    public void DesativarPortas()
     {
         foreach (Door door in doors)
         {
-            Debug.Log($"Verificando porta: {door.doorType}");
-            Debug.Log($"Existe sala a esquerda: {RoomController.instance.DoesRoomExistsInQueue(x - 1, y)}");
-            Debug.Log($"Existe sala a direita: {RoomController.instance.DoesRoomExistsInQueue(x + 1, y)}");
-            Debug.Log($"Existe sala a cima: {RoomController.instance.DoesRoomExistsInQueue(x, y + 1)}");
-            Debug.Log($"Existe sala a baixo: {RoomController.instance.DoesRoomExistsInQueue(x, y - 1)}");
+            door.gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateDoors()
+    {
+        List<RoomInfo> salasExistentes = RoomController.instance.loadRoomQueue;
+        foreach (Door door in doors)
+        {
             switch (door.doorType)
             {
                 case Door.DoorType.left:
@@ -81,11 +102,19 @@ public class Room : MonoBehaviour
                     {
                         door.gameObject.SetActive(false);
                     }
+                    else
+                    {
+                        door.gameObject.SetActive(true);
+                    }
                     break;
                 case Door.DoorType.right:
                     if (!RoomController.instance.DoesRoomExistsInQueue(x + 1, y))
                     {
                         door.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        door.gameObject.SetActive(true);
                     }
                     break;
                 case Door.DoorType.top:
@@ -93,11 +122,19 @@ public class Room : MonoBehaviour
                     {
                         door.gameObject.SetActive(false);
                     }
+                    else
+                    {
+                        door.gameObject.SetActive(true);
+                    }
                     break;
                 case Door.DoorType.bottom:
                     if (!RoomController.instance.DoesRoomExistsInQueue(x, y - 1))
                     {
                         door.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        door.gameObject.SetActive(true);
                     }
                     break;
             }
@@ -154,6 +191,49 @@ public class Room : MonoBehaviour
         if (other.tag == "Player")
         {
             RoomController.instance.OnPlayerEnterRoom(this);
+            ReativarPortas();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.tag == "Player")
+        {
+            RoomController.instance.PlayerVaiSairSala(this);
+        }
+    }
+
+    public void ReativarPortas()
+    {
+        foreach (Door door in doors)
+        {
+            switch (door.doorType)
+            {
+                case Door.DoorType.left:
+                    if (RoomController.instance.DoesRoomExistsInList(x - 1, y) || RoomController.instance.DoesRoomExistsInQueue(x - 1, y))
+                    {
+                        door.gameObject.SetActive(true);
+                    }
+                    break;
+                case Door.DoorType.right:
+                    if (RoomController.instance.DoesRoomExistsInList(x + 1, y) || RoomController.instance.DoesRoomExistsInQueue(x + 1, y))
+                    {
+                        door.gameObject.SetActive(true);
+                    }
+                    break;
+                case Door.DoorType.top:
+                    if (RoomController.instance.DoesRoomExistsInList(x, y + 1) || RoomController.instance.DoesRoomExistsInQueue(x, y + 1))
+                    {
+                        door.gameObject.SetActive(true);
+                    }
+                    break;
+                case Door.DoorType.bottom:
+                    if (RoomController.instance.DoesRoomExistsInList(x, y - 1) || RoomController.instance.DoesRoomExistsInQueue(x, y - 1))
+                    {
+                        door.gameObject.SetActive(true);
+                    }
+                    break;
+            }
         }
     }
 }

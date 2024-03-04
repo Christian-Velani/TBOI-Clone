@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectRoomSpawner : MonoBehaviour
@@ -9,21 +10,19 @@ public class ObjectRoomSpawner : MonoBehaviour
     {
         public string name;
         public SpawnerData spawnerData;
+        public bool spawned;
     }
 
     public GridController grid;
     public RandomSpawner[] spawnerData;
 
-    void Start()
-    {
-        //  grid = GetComponentInChildren<GridController>();
-    }
-
     public void InitializeObjectSpawning()
     {
         foreach (RandomSpawner rs in spawnerData)
         {
-            SpawnObjects(rs);
+            if (rs.spawnerData.itemToSpawn.GetComponent<EnemyController>())
+            { SpawnObjects(rs); }
+
         }
     }
 
@@ -36,7 +35,6 @@ public class ObjectRoomSpawner : MonoBehaviour
             int randomPos = Random.Range(0, grid.availablePoints.Count - 1);
             Instantiate(data.spawnerData.itemToSpawn, grid.availablePoints[randomPos], Quaternion.identity, transform);
             grid.availablePoints.RemoveAt(randomPos);
-            Debug.Log("Spawned Object!");
         }
     }
 }

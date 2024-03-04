@@ -28,7 +28,7 @@ public class DungeonCrawlerController : MonoBehaviour
 
         for (int i = 0; i < dungeonData.numberOfCrawlers; i++)
         {
-            dungeonCrawlers.Add(new DungeonCrawler(Vector2Int.zero));
+            dungeonCrawlers.Add(ScriptableObject.CreateInstance<DungeonCrawler>());
         }
 
         int iterations = Random.Range(dungeonData.iterationMin, dungeonData.iterationMax);

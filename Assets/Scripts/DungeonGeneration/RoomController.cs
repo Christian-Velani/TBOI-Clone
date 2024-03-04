@@ -54,18 +54,22 @@ public class RoomController : MonoBehaviour
         {
             CriarPrimeiraSala();
         }
+        if (!spawnedBossRoom)
+        {
+            CriarSalaBoss();
+        }
         if (isLoadingRoom)
         {
             return;
         }
 
-        if (loadRoomQueue.Count == 0)
-        {
-            if (!spawnedBossRoom)
-            {
-                StartCoroutine(SpawnBossRoom());
-            }
-        }
+        // if (loadRoomQueue.Count == 0)
+        // {
+        //     if (!spawnedBossRoom)
+        //     {
+        //         StartCoroutine(SpawnBossRoom());
+        //     }
+        // }
         // else if (spawnedBossRoom && !updatedRooms)
         // {
         //     foreach (Room room in loadedRooms)
@@ -84,19 +88,25 @@ public class RoomController : MonoBehaviour
         //StartCoroutine(LoadRoomRoutine(roomToRemove));
     }
 
-    IEnumerator SpawnBossRoom()
+    // IEnumerator SpawnBossRoom()
+    // {
+    //     spawnedBossRoom = true;
+    //     yield return new WaitForSeconds(0.5f);
+    //     if (loadRoomQueue.Count == 0)
+    //     {
+    //         Room bossRoom = loadedRooms[loadedRooms.Count - 1];
+    //         Room tempRoom = new(bossRoom.x, bossRoom.y);
+    //         Destroy(bossRoom.gameObject);
+    //         var roomToRemove2 = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
+    //         loadedRooms.Remove(roomToRemove2);
+    //         LoadRoom("End", tempRoom.x, tempRoom.y);
+    //     }
+    // }
+    void CriarSalaBoss()
     {
+        loadRoomQueue[loadRoomQueue.Count - 1].name = "End";
         spawnedBossRoom = true;
-        yield return new WaitForSeconds(0.5f);
-        if (loadRoomQueue.Count == 0)
-        {
-            Room bossRoom = loadedRooms[loadedRooms.Count - 1];
-            Room tempRoom = new(bossRoom.x, bossRoom.y);
-            Destroy(bossRoom.gameObject);
-            var roomToRemove2 = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
-            loadedRooms.Remove(roomToRemove2);
-            LoadRoom("End", tempRoom.x, tempRoom.y);
-        }
+
     }
 
     public void LoadRoom(string name, int x, int y)
@@ -113,7 +123,6 @@ public class RoomController : MonoBehaviour
         };
 
         loadRoomQueue.Add(newRoomData);
-        Debug.Log($"Tamanho da fila: {loadRoomQueue.Count}");
     }
 
     IEnumerator LoadRoomRoutine(RoomInfo info)
@@ -146,7 +155,6 @@ public class RoomController : MonoBehaviour
                 CameraController.instance.currRoom = room;
             }
             loadedRooms.Add(room);
-            Debug.Log($"Tamanho da Lista: {loadedRooms.Count}");
         }
         else
         {
@@ -158,7 +166,6 @@ public class RoomController : MonoBehaviour
     public bool DoesRoomExistsInQueue(int x, int y)
     {
         return loadRoomQueue.Find(item => item.x == x && item.y == y) != null;
-
     }
 
     public bool DoesRoomExistsInList(int x, int y)
@@ -188,27 +195,38 @@ public class RoomController : MonoBehaviour
         UpdateRooms();
     }
 
+    public void PlayerVaiSairSala(Room room)
+    {
+        foreach (Door door in room.doors)
+        {
+            door.gameObject.SetActive(false);
+        }
+    }
+
     public void PassouPorta(Door door)
     {
         switch (door.doorType)
         {
             case Door.DoorType.left:
-                PassouEsquerda();
+                PassouEsquerda(door.transform.position);
                 break;
             case Door.DoorType.right:
-                PassouDireita();
+                PassouDireita(door.transform.position);
                 break;
             case Door.DoorType.top:
-                PassouCima();
+                PassouCima(door.transform.position);
                 break;
             case Door.DoorType.bottom:
-                PassouBaixo();
+                PassouBaixo(door.transform.position);
                 break;
         }
     }
 
-    public void PassouEsquerda()
+    public void PassouEsquerda(Vector2 posicaoPorta)
     {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector2(posicaoPorta.x - 2.5f, posicaoPorta.y);
+
         if (DoesRoomExistsInQueue(currRoom.x - 1, currRoom.y))
         {
             roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x - 1 && r.y == currRoom.y);
@@ -218,8 +236,11 @@ public class RoomController : MonoBehaviour
             StartCoroutine(LoadRoomRoutine(roomToRemove));
         }
     }
-    public void PassouDireita()
+    public void PassouDireita(Vector2 posicaoPorta)
     {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector2(posicaoPorta.x + 2.5f, posicaoPorta.y);
+
         if (DoesRoomExistsInQueue(currRoom.x + 1, currRoom.y))
         {
             roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x + 1 && r.y == currRoom.y);
@@ -230,11 +251,15 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void PassouCima()
+    public void PassouCima(Vector2 posicaoPorta)
     {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector2(posicaoPorta.x, posicaoPorta.y + 2.5f);
+
         if (DoesRoomExistsInQueue(currRoom.x, currRoom.y + 1))
         {
             roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x && r.y == currRoom.y + 1);
+
             loadRoomQueue.Remove(roomToRemove);
             isLoadingRoom = true;
 
@@ -242,8 +267,11 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void PassouBaixo()
+    public void PassouBaixo(Vector2 posicaoPorta)
     {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector2(posicaoPorta.x, posicaoPorta.y - 2.5f);
+
         if (DoesRoomExistsInQueue(currRoom.x, currRoom.y - 1))
         {
             roomToRemove = loadRoomQueue.Single(r => r.x == currRoom.x && r.y == currRoom.y - 1);
@@ -266,7 +294,6 @@ public class RoomController : MonoBehaviour
                     foreach (EnemyController enemy in enemies)
                     {
                         enemy.notInRoom = true;
-                        Debug.Log("Not in Room");
                     }
                 }
             }
@@ -278,7 +305,6 @@ public class RoomController : MonoBehaviour
                     foreach (EnemyController enemy in enemies)
                     {
                         enemy.notInRoom = false;
-                        Debug.Log("In Room");
                     }
                 }
             }

@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 public class Door : MonoBehaviour
 {
@@ -12,8 +11,11 @@ public class Door : MonoBehaviour
 
     public DoorType doorType;
 
-    public void OnTriggerEnter2D(Collider2D collisor)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        RoomController.instance.PassouPorta(this);
+        if (other.tag == "Player")
+        {
+            RoomController.instance.PassouPorta(this);
+        }
     }
 }

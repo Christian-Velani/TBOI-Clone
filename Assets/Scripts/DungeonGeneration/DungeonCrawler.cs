@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonCrawler : MonoBehaviour
+public class DungeonCrawler : ScriptableObject
 {
     public Vector2Int Position { get; set; }
     public DungeonCrawler(Vector2Int startPos)
