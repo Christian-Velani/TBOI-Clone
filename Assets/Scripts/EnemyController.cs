@@ -154,6 +154,10 @@ public class EnemyController : MonoBehaviour
     public void Death()
     {
         Destroy(gameObject);
+        if (!GetComponentInParent<Room>().GetComponentInChildren<EnemyController>())
+        {
+            GetComponentInParent<Room>().ReativarPortas();
+        }
     }
 
     public void Idle()
