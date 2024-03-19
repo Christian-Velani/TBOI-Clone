@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,11 +36,5 @@ public class ItemSpawner : MonoBehaviour
         }
 
         Instantiate(items[chosenIndex].gameobject, transform);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
