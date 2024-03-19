@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectRoomSpawner : MonoBehaviour
 {
-    [System.Serializable]
+    [System.Serializable] // Permite que esse tipo de struct possa ser serializado
     public struct RandomSpawner
     {
-        public string name;
-        public SpawnerData spawnerData;
-        public bool spawned;
+        public SpawnerData spawnerData; // Armazena as informações do que deve ser spawnado
     }
 
-    public GridController grid;
-    public RandomSpawner[] spawnerData;
+    public GridController grid; // Armazena o grid da sala
+    public RandomSpawner[] spawnerData; // Armazena uma lista de spawners
 
     public void InitializeObjectSpawning()
     {
-        foreach (RandomSpawner rs in spawnerData)
+        foreach (RandomSpawner rs in spawnerData) // Iterando pela lista de spawners
         {
-            if (rs.spawnerData.itemToSpawn.GetComponent<EnemyController>())
-            { SpawnObjects(rs); }
+            if (rs.spawnerData.itemToSpawn.GetComponent<EnemyController>()) // Verifica se o item a ser spawnado é um inimigo
+            { SpawnObjects(rs); } // Spawna o item
 
         }
     }
