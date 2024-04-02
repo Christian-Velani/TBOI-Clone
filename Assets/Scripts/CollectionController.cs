@@ -27,7 +27,6 @@ public class CollectionController : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            PlayerController.collectedAmount++;
             GameController.HealPlayer(healthChange);
             GameController.MoveSpeedChange(moveSpeedChange);
             GameController.FireRateChange(attackSpeedChange);

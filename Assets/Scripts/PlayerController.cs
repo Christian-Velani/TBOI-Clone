@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        speed = GameController.MoveSpeed;
+        fireDelay = GameController.FireRate;
         float horizontal = Input.GetAxis("Horizontal"); // Armazena o eixo horizontal baseado no Input
         float vertical = Input.GetAxis("Vertical"); // Armazena o eixo vertical baseado no Input
         float shootHor = Input.GetAxis("ShootHorizontal"); // Armazena o eixo de tiro horizontal baseado no Input

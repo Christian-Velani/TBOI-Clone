@@ -394,7 +394,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  collectedText: {fileID: 509966929}
   bulletPreFab: {fileID: 5555934037640113646, guid: c27466589c81c0e43bbb299c0504842a, type: 3}
   bulletSpeed: 7.5
   fireDelay: 0.5
@@ -719,7 +718,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collectedNames: []
-  healthText: {fileID: 211866508}
 --- !u!1 &509966927
 GameObject:
   m_ObjectHideFlags: 0
