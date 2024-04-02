@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +13,6 @@ public class GameController : MonoBehaviour
     private bool bootCollected = false;
     private bool screwCollected = false;
     public List<string> collectedNames = new();
-    public Text healthText;
     private void Awake()
     {
         if (instance == null)
@@ -23,21 +21,9 @@ public class GameController : MonoBehaviour
         }
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        healthText.text = "Health: " + Health;
-    }
-
     public static void DamagePlayer(int damage)
     {
         Health -= damage;
-
-        if (Health <= 0)
-        {
-            KillPlayer();
-        }
     }
 
     public static void HealPlayer(float healAmount)
@@ -81,10 +67,5 @@ public class GameController : MonoBehaviour
         {
             FireRateChange(0.25f);
         }
-    }
-
-    private static void KillPlayer()
-    {
-
     }
 }
