@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public enum EnemyState
@@ -9,7 +6,6 @@ public enum EnemyState
     Idle,
     Wander,
     Follow,
-    Die,
     Attack,
 };
 
@@ -31,7 +27,6 @@ public class EnemyController : MonoBehaviour
     public float coolDown;
     public bool notInRoom = false;
     private bool chooseDir = false;
-    private bool dead = false;
     private bool coolDownAttack = false;
     private Vector3 randomDir;
     public GameObject bulletPreFab;
@@ -58,9 +53,6 @@ public class EnemyController : MonoBehaviour
                 Follow();
                 break;
 
-            case EnemyState.Die:
-                break;
-
             case EnemyState.Attack:
                 Attack();
                 break;
@@ -68,11 +60,11 @@ public class EnemyController : MonoBehaviour
 
         if (!notInRoom)
         {
-            if (IsPlayerInRange(range) && currState != EnemyState.Die)
+            if (IsPlayerInRange(range))
             {
                 currState = EnemyState.Follow;
             }
-            else if (!IsPlayerInRange(range) && currState != EnemyState.Die)
+            else if (!IsPlayerInRange(range))
             {
                 currState = EnemyState.Wander;
             }
@@ -154,10 +146,6 @@ public class EnemyController : MonoBehaviour
     public void Death()
     {
         Destroy(gameObject);
-        if (!GetComponentInParent<Room>().GetComponentInChildren<EnemyController>())
-        {
-            GetComponentInParent<Room>().ReativarPortas();
-        }
     }
 
     public void Idle()

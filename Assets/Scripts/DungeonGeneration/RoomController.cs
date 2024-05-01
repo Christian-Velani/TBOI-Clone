@@ -15,7 +15,7 @@ public class RoomController : MonoBehaviour
 {
     public static RoomController instance;
     string currentWorldName = "Basement";
-    Room currRoom;
+    public Room currRoom;
     RoomInfo roomToRemove;
     public List<RoomInfo> loadRoomQueue = new();
     public List<Room> loadedRooms = new();

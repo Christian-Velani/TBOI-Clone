@@ -56,31 +56,43 @@ public class Room : MonoBehaviour
         InimigosExistem();
     }
 
-    void InimigosExistem()
+    bool InimigosExistem()
     {
         if (GetComponentInChildren<EnemyController>())
         {
-            DesativarPortas();
+            return true;
         }
+
+        return false;
     }
 
-    // void Update()
-    // {
-    //     if (GetComponent<ObjectRoomSpawner>().spawnerData.Length != 0)
-    //     {
-    //         foreach (Door door in doors)
-    //         { door.gameObject.SetActive(false); };
-    //     }
-    //     else
-    //     {
-    //         ReativarPortas();
-    //     }
-    //     //     if (name.Contains("End") && !updatedDoors)
-    //     //     {
-    //     //         UpdateDoors();
-    //     //         updatedDoors = true;
-    //     //     }
-    // }
+    void Update()
+    {
+        if (InimigosExistem() && RoomController.instance.currRoom == this)
+        {
+            Debug.Log("Tem inimigos e o player está na sala");
+            DesativarPortas();
+        }
+        else if (!InimigosExistem() && RoomController.instance.currRoom == this)
+        {
+            Debug.Log("Não tem inimigos e o player está na sala");
+            ReativarPortas();
+        }
+        //     if (GetComponent<ObjectRoomSpawner>().spawnerData.Length != 0)
+        //     {
+        //         foreach (Door door in doors)
+        //         { door.gameObject.SetActive(false); };
+        //     }
+        //     else
+        //     {
+        //         ReativarPortas();
+        //     }
+        //     //     if (name.Contains("End") && !updatedDoors)
+        //     //     {
+        //     //         UpdateDoors();
+        //     //         updatedDoors = true;
+        //     //     }
+    }
 
     public void DesativarPortas()
     {
@@ -191,7 +203,6 @@ public class Room : MonoBehaviour
         if (other.tag == "Player")
         {
             RoomController.instance.OnPlayerEnterRoom(this);
-            ReativarPortas();
         }
     }
 
@@ -205,34 +216,37 @@ public class Room : MonoBehaviour
 
     public void ReativarPortas()
     {
-        foreach (Door door in doors)
+        if (RoomController.instance.currRoom == this)
         {
-            switch (door.doorType)
+            foreach (Door door in doors)
             {
-                case Door.DoorType.left:
-                    if (RoomController.instance.DoesRoomExistsInList(x - 1, y) || RoomController.instance.DoesRoomExistsInQueue(x - 1, y))
-                    {
-                        door.gameObject.SetActive(true);
-                    }
-                    break;
-                case Door.DoorType.right:
-                    if (RoomController.instance.DoesRoomExistsInList(x + 1, y) || RoomController.instance.DoesRoomExistsInQueue(x + 1, y))
-                    {
-                        door.gameObject.SetActive(true);
-                    }
-                    break;
-                case Door.DoorType.top:
-                    if (RoomController.instance.DoesRoomExistsInList(x, y + 1) || RoomController.instance.DoesRoomExistsInQueue(x, y + 1))
-                    {
-                        door.gameObject.SetActive(true);
-                    }
-                    break;
-                case Door.DoorType.bottom:
-                    if (RoomController.instance.DoesRoomExistsInList(x, y - 1) || RoomController.instance.DoesRoomExistsInQueue(x, y - 1))
-                    {
-                        door.gameObject.SetActive(true);
-                    }
-                    break;
+                switch (door.doorType)
+                {
+                    case Door.DoorType.left:
+                        if (RoomController.instance.DoesRoomExistsInList(x - 1, y) || RoomController.instance.DoesRoomExistsInQueue(x - 1, y))
+                        {
+                            door.gameObject.SetActive(true);
+                        }
+                        break;
+                    case Door.DoorType.right:
+                        if (RoomController.instance.DoesRoomExistsInList(x + 1, y) || RoomController.instance.DoesRoomExistsInQueue(x + 1, y))
+                        {
+                            door.gameObject.SetActive(true);
+                        }
+                        break;
+                    case Door.DoorType.top:
+                        if (RoomController.instance.DoesRoomExistsInList(x, y + 1) || RoomController.instance.DoesRoomExistsInQueue(x, y + 1))
+                        {
+                            door.gameObject.SetActive(true);
+                        }
+                        break;
+                    case Door.DoorType.bottom:
+                        if (RoomController.instance.DoesRoomExistsInList(x, y - 1) || RoomController.instance.DoesRoomExistsInQueue(x, y - 1))
+                        {
+                            door.gameObject.SetActive(true);
+                        }
+                        break;
+                }
             }
         }
     }
