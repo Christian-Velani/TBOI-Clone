@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -9,12 +10,13 @@ public class GameController : MonoBehaviour
     public static int MaxHealth { get; set; } = 6;
     public static float MoveSpeed { get; set; } = 5f;
     public static float FireRate { get; set; } = 0.5f;
-    public static float BulletSize { get; set; } = 0.5f;
+    public static float BulletSize { get; set; } = 0.05f;
     private bool bootCollected = false;
     private bool screwCollected = false;
     public List<string> collectedNames = new();
     private void Awake()
     {
+        Health = 6;
         if (instance == null)
         {
             instance = this;
@@ -24,6 +26,10 @@ public class GameController : MonoBehaviour
     public static void DamagePlayer(int damage)
     {
         Health -= damage;
+        if (Health <= 0)
+        {
+            SceneManager.LoadScene(5);
+        }
     }
 
     public static void HealPlayer(float healAmount)

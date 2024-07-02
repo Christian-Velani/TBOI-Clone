@@ -50,6 +50,10 @@ public class RoomController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(5);
+        }
         if (!primeiraSalaCriada)
         {
             CriarPrimeiraSala();

@@ -54,6 +54,12 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if (col.CompareTag("Boss") && !isEnemyBullet)
+        {
+            col.gameObject.GetComponent<BossController>().life -= 1;
+            Destroy(gameObject);
+        }
+
         if (col.CompareTag("Player") && isEnemyBullet)
         {
             GameController.DamagePlayer(1);

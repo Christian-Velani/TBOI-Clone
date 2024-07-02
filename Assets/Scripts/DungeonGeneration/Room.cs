@@ -70,13 +70,15 @@ public class Room : MonoBehaviour
     {
         if (InimigosExistem() && RoomController.instance.currRoom == this)
         {
-            Debug.Log("Tem inimigos e o player está na sala");
             DesativarPortas();
         }
         else if (!InimigosExistem() && RoomController.instance.currRoom == this)
         {
-            Debug.Log("Não tem inimigos e o player está na sala");
             ReativarPortas();
+        }
+        else if (RoomController.instance.currRoom != this)
+        {
+            DesativarPortas();
         }
         //     if (GetComponent<ObjectRoomSpawner>().spawnerData.Length != 0)
         //     {
